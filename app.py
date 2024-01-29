@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from database import load_info_from_db
+#from database import load_info_from_db
 
 app = Flask(__name__)
 

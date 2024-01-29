@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        Hello there, we are at the home page.
+        <div>
+            {% for stock in stocks %}
+                <div><h2>{{stock.name}}</h2>
+                   <!-- Ticker: {{stock.ticker}}<br> -->
+                    Price: {{stock.value}}
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>
