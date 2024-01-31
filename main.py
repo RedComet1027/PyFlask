@@ -1,8 +1,8 @@
 from flask import Flask, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from database import load_info_from_db
-
-app = Flask(__name__)
+#from database import load_info_from_db
+'''
+app_old = Flask(__name__)
 
 STOCKS = [{
     'id': 1,
@@ -35,3 +35,4 @@ def stocks():
 
 
 app.run(host='0.0.0.0', port=81)
+'''
