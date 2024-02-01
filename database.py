@@ -42,3 +42,21 @@ def load_stock_from_db(id):
         else:
             # convert result (or row) object to a dict
             return dict(stock[0]._mapping)
+
+
+# for saving portoflio data in database
+def save_portfolio_to_db(data):
+    with engine.connect() as conn:
+        # create query in text
+        query = text(
+            "insert into portfolio (id, name, description) values (:id, :name, :description)"
+        )
+        # put data and dict for query
+        value_dict = {
+            "id": '1001',  ## hardcode id for now    
+            "name": data['name'],
+            "description": data['description'],
+        }
+        # execute query and REMEBER to commit
+        conn.execute(query, value_dict)
+        conn.commit()
