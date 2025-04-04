@@ -32,13 +32,7 @@ def new_portfolio():
 def save_portfolio():
     portfolio_name = request.form['portfolioName']
     selected_stocks = request.form.getlist('selectedStocks')
-    
-    with engine.connect() as conn:
-        # Insert into user_folio table
-        query = text("INSERT INTO user_folio (name, stock_tickers) VALUES (:name, :tickers)")
-        conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
-        conn.commit()
-    
+    save_portfolio_data_to_db(portfolio_name, selected_stocks)
     return redirect('/')
 
 

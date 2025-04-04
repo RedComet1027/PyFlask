@@ -60,3 +60,9 @@ def save_portfolio_to_db(data):
         # execute query and REMEBER to commit
         conn.execute(query, value_dict)
         conn.commit()
+
+def save_portfolio_data_to_db(portfolio_name, selected_stocks):
+    with engine.connect() as conn:
+        query = text("INSERT INTO user_folio (name, stock_tickers) VALUES (:name, :tickers)")
+        conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
+        conn.commit()
