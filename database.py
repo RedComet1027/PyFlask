@@ -82,10 +82,14 @@ def load_portfolio_stocks_from_db(portfolio_name):
         
         if portfolio:
             stock_ids = [int(id) for id in portfolio[0].split(',')]
-            # Get the stock details using integer IDs
-            stocks = conn.execute(
-                text("SELECT * FROM stock WHERE id = ANY(:ids::integer[])"),
-                {"ids": stock_ids}
-            )
-            return [dict(row._mapping) for row in stocks.all()]
+            stocks = []
+            # Get each stock individually
+            for stock_id in stock_ids:
+                result = conn.execute(
+                    text("SELECT * FROM stock WHERE id = :id"),
+                    {"id": stock_id}
+                ).first()
+                if result:
+                    stocks.append(dict(result._mapping))
+            return stocks
         return []
