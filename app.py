@@ -36,5 +36,14 @@ def save_portfolio():
     save_portfolio_data_to_db(portfolio_name, selected_stocks)
     return redirect('/')
 
+@app.route('/list-portfolio')
+def list_portfolio():
+    portfolios = load_portfolios_from_db()
+    return render_template('list_portfolio.html', portfolios=portfolios)
+
+@app.route('/api/portfolio/<portfolio_name>/stocks')
+def get_portfolio_stocks(portfolio_name):
+    stocks = load_portfolio_stocks_from_db(portfolio_name)
+    return jsonify(stocks)
 
 app.run(host='0.0.0.0', port=81)

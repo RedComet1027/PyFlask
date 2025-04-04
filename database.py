@@ -66,3 +66,26 @@ def save_portfolio_data_to_db(portfolio_name, selected_stocks):
         query = text("INSERT INTO user_folio (name, stock_tickers) VALUES (:name, :tickers)")
         conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
         conn.commit()
+
+def load_portfolios_from_db():
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT DISTINCT name FROM user_folio"))
+        return [dict(row._mapping) for row in result.all()]
+
+def load_portfolio_stocks_from_db(portfolio_name):
+    with engine.connect() as conn:
+        # Get the stock IDs for the portfolio
+        portfolio = conn.execute(
+            text("SELECT stock_tickers FROM user_folio WHERE name = :name"),
+            {"name": portfolio_name}
+        ).first()
+        
+        if portfolio:
+            stock_ids = portfolio[0].split(',')
+            # Get the stock details
+            stocks = conn.execute(
+                text("SELECT * FROM stock WHERE id = ANY(:ids)"),
+                {"ids": stock_ids}
+            )
+            return [dict(row._mapping) for row in stocks.all()]
+        return []
