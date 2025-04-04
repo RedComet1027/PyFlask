@@ -28,16 +28,17 @@ def new_portfolio():
     stocks = load_stocks_from_db()
     return render_template('new_portfolio.html', stocks=stocks)
 
-@app.route('/', methods=['POST'])
+@app.route('/save-portfolio', methods=['POST'])
 def save_portfolio():
-    # Handle form submission
     portfolio_name = request.form['portfolioName']
-    stock_names = request.form.getlist('stockName[]')
-    stock_tickers = request.form.getlist('stockTicker[]')
-    stock_prices = request.form.getlist('stockPrice[]')
+    selected_stocks = request.form.getlist('selectedStocks')
     
-    # Here you would save the data to your database
-    # For now we'll just redirect back to home
+    with engine.connect() as conn:
+        # Insert into user_folio table
+        query = text("INSERT INTO user_folio (name, stock_tickers) VALUES (:name, :tickers)")
+        conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
+        conn.commit()
+    
     return redirect('/')
 
 
