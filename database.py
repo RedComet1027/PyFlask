@@ -53,7 +53,7 @@ def save_portfolio_to_db(data):
         )
         # put data and dict for query
         value_dict = {
-            "id": '1001',  ## hardcode id for now    
+            "id": '1003',  ## hardcode id for now    
             "name": data['name'],
             "description": data['description'],
         }
