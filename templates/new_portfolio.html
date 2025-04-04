@@ -16,38 +16,65 @@
                 <input type="text" class="form-control" id="portfolioName" name="portfolioName" required>
             </div>
             
-            <div class="mb-3">
-                <button type="button" class="btn btn-secondary" onclick="addStock()">Add Stock</button>
-            </div>
+            <h4>Available Stocks</h4>
+            <table class="table" id="availableStocks">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Ticker</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <td><input type="checkbox" name="selectedStocks" value="{{ stock.id }}" onchange="updateSelectedStocks(this)"></td>
+                        <td>{{ stock.name }}</td>
+                        <td>{{ stock.ticker }}</td>
+                        <td>{{ stock.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-            <table class="table" id="stockTable">
+            <h4>Selected Stocks</h4>
+            <table class="table" id="selectedStocksTable">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Ticker</th>
                         <th>Price</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="stockTableBody">
+                <tbody id="selectedStocksBody">
                 </tbody>
             </table>
 
-            <button type="submit" class="btn btn-primary">Save Portfolio</button>
+            <button type="submit" class="btn btn-primary">Add to Portfolio</button>
         </form>
     </div>
 
     <script>
-        function addStock() {
-            const tbody = document.getElementById('stockTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><input type="text" class="form-control" name="stockName[]" required></td>
-                <td><input type="text" class="form-control" name="stockTicker[]" required></td>
-                <td><input type="text" class="form-control" name="stockPrice[]" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">Remove</button></td>
-            `;
-            tbody.appendChild(row);
+        function updateSelectedStocks(checkbox) {
+            const row = checkbox.closest('tr');
+            const selectedStocksBody = document.getElementById('selectedStocksBody');
+            
+            if (checkbox.checked) {
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-stock-id', checkbox.value);
+                newRow.innerHTML = `
+                    <td>${row.cells[1].textContent}</td>
+                    <td>${row.cells[2].textContent}</td>
+                    <td>${row.cells[3].textContent}</td>
+                `;
+                selectedStocksBody.appendChild(newRow);
+            } else {
+                const existingRow = selectedStocksBody.querySelector(`tr[data-stock-id="${checkbox.value}"]`);
+                if (existingRow) {
+                    existingRow.remove();
+                }
+            }
         }
     </script>
 </body>

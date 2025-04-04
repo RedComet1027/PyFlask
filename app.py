@@ -25,7 +25,8 @@ def show_stock(id):
 # obtain new portfolio via Post from html FORM
 @app.route('/new-portfolio')
 def new_portfolio():
-    return render_template('new_portfolio.html')
+    stocks = load_stocks_from_db()
+    return render_template('new_portfolio.html', stocks=stocks)
 
 @app.route('/', methods=['POST'])
 def save_portfolio():
