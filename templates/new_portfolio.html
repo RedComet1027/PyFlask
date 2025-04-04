@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>New Portfolio | DivTracker</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>New Portfolio</h2>
+        <form action="/" method="post" id="portfolioForm">
+            <div class="mb-3">
+                <label for="portfolioName" class="form-label">Portfolio Name</label>
+                <input type="text" class="form-control" id="portfolioName" name="portfolioName" required>
+            </div>
+            
+            <div class="mb-3">
+                <button type="button" class="btn btn-secondary" onclick="addStock()">Add Stock</button>
+            </div>
+
+            <table class="table" id="stockTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Ticker</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="stockTableBody">
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-primary">Save Portfolio</button>
+        </form>
+    </div>
+
+    <script>
+        function addStock() {
+            const tbody = document.getElementById('stockTableBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="form-control" name="stockName[]" required></td>
+                <td><input type="text" class="form-control" name="stockTicker[]" required></td>
+                <td><input type="text" class="form-control" name="stockPrice[]" required></td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">Remove</button></td>
+            `;
+            tbody.appendChild(row);
+        }
+    </script>
+</body>
+</html>

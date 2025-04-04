@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from database import load_stocks_from_db, load_stock_from_db, save_portfolio_to_db
 
@@ -23,14 +23,21 @@ def show_stock(id):
 
 
 # obtain new portfolio via Post from html FORM
-@app.route('/portfolio/create', methods=['post'])
-def create_portfolio():
-    # get FORM data from request
-    data = request.form
-    # store data in database
-    save_portfolio_to_db(data)
-    # return for debug
-    return jsonify(data)
+@app.route('/new-portfolio')
+def new_portfolio():
+    return render_template('new_portfolio.html')
+
+@app.route('/', methods=['POST'])
+def save_portfolio():
+    # Handle form submission
+    portfolio_name = request.form['portfolioName']
+    stock_names = request.form.getlist('stockName[]')
+    stock_tickers = request.form.getlist('stockTicker[]')
+    stock_prices = request.form.getlist('stockPrice[]')
+    
+    # Here you would save the data to your database
+    # For now we'll just redirect back to home
+    return redirect('/')
 
 
 app.run(host='0.0.0.0', port=81)
