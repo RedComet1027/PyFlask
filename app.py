@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from database import load_stocks_from_db, load_stock_from_db, save_portfolio_to_db
+from database import load_stocks_from_db, load_stock_from_db, save_portfolio_to_db, save_portfolio_data_to_db
 
 app = Flask(__name__)
 
@@ -27,6 +27,7 @@ def show_stock(id):
 def new_portfolio():
     stocks = load_stocks_from_db()
     return render_template('new_portfolio.html', stocks=stocks)
+
 
 @app.route('/save-portfolio', methods=['POST'])
 def save_portfolio():
