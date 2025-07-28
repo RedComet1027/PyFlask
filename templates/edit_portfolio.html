@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Edit Portfolio | DivTracker</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Portfolio</h2>
+        <form action="/update-portfolio" method="post">
+            <div class="mb-3">
+                <label for="portfolioName" class="form-label">Portfolio Name</label>
+                <input type="text" class="form-control" id="portfolioName" name="portfolioName" value="{{ portfolio_name }}" required>
+            </div>
+
+            <h4>Available Stocks</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Ticker</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedStocks" value="{{ stock.id }}" 
+                                {% if stock.id in selected_stock_ids %} checked {% endif %}>
+                        </td>
+                        <td>{{ stock.name }}</td>
+                        <td>{{ stock.ticker }}</td>
+                        <td>{{ stock.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-primary">Update Portfolio</button>
+        </form>
+    </div>
+</body>
+</html>

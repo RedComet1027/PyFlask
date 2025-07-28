@@ -20,6 +20,9 @@
             </select>
         </div>
 
+        <button class="btn btn-primary" onclick="window.location.href='/new-portfolio'">New Portfolio</button>
+        <button class="btn btn-primary" id="editPortfolioButton" onclick="editPortfolio()">Edit Portfolio</button>
+        
         <div id="stocksTable" style="display: none;">
             <h4>Stocks in Portfolio</h4>
             <table class="table">
@@ -37,6 +40,16 @@
     </div>
 
     <script>
+        function editPortfolio() {
+            const portfolioName = document.getElementById('portfolioSelect').value;
+            if (portfolioName) {
+                window.location.href = `/edit-portfolio?name=${encodeURIComponent(portfolioName)}`;
+            }
+        }
+
+        // Ensure this function triggers on change of dropdown
+document.getElementById('portfolioSelect').addEventListener('change', toggleEditButton);
+        
         function loadPortfolioStocks() {
             const portfolioName = document.getElementById('portfolioSelect').value;
             if (!portfolioName) {

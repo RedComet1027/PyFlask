@@ -41,6 +41,26 @@ def list_portfolio():
     portfolios = load_portfolios_from_db()
     return render_template('list_portfolio.html', portfolios=portfolios)
 
+@app.route('/edit-portfolio')
+def edit_portfolio():
+    portfolio_name = request.args.get('name')
+    portfolio_stocks = load_portfolio_stocks_from_db(portfolio_name)
+    stocks = load_stocks_from_db()
+
+    selected_stock_ids = {str(stock['id']) for stock in portfolio_stocks}
+    return render_template('edit_portfolio.html', 
+                           portfolio_name=portfolio_name, 
+                           stocks=stocks,
+                           selected_stock_ids=selected_stock_ids)
+
+@app.route('/update-portfolio', methods=['POST'])
+def update_portfolio():
+    portfolio_name = request.form['portfolioName']
+    selected_stocks = request.form.getlist('selectedStocks')
+    # function to save/update portfolio logic here
+    # e.g. by calling a database function to update the selected stocks
+    return redirect('/list-portfolio')  # Redirect back to the list portfolio page
+    
 @app.route('/api/portfolio/<portfolio_name>/stocks')
 def get_portfolio_stocks(portfolio_name):
     stocks = load_portfolio_stocks_from_db(portfolio_name)
