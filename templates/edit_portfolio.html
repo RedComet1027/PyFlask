@@ -12,9 +12,9 @@
         <form action="/update-portfolio" method="post">
             <div class="mb-3">
                 <label for="portfolioName" class="form-label">Portfolio Name</label>
-                <input type="text" class="form-control" id="portfolioName" name="portfolioName" value="{{ portfolio_name }}" required>
+                <input type="text" class="form-control" id="portfolioName" name="portfolioName" value="{{ portfolio_name }}" readonly>
             </div>
-
+            
             <h4>Available Stocks</h4>
             <table class="table">
                 <thead>

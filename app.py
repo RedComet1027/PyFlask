@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from database import load_stocks_from_db, load_stock_from_db, save_portfolio_to_db, save_portfolio_data_to_db, load_portfolios_from_db, load_portfolio_stocks_from_db
+from database import load_stocks_from_db, load_stock_from_db, save_portfolio_data_to_db, load_portfolios_from_db, load_portfolio_stocks_from_db, update_portfolio_data_to_db
 
 app = Flask(__name__)
 
@@ -21,8 +21,6 @@ def show_stock(id):
     stock = load_stock_from_db(id)
     return jsonify(stock)
 
-
-# obtain new portfolio via Post from html FORM
 @app.route('/new-portfolio')
 def new_portfolio():
     stocks = load_stocks_from_db()
@@ -57,8 +55,9 @@ def edit_portfolio():
 def update_portfolio():
     portfolio_name = request.form['portfolioName']
     selected_stocks = request.form.getlist('selectedStocks')
-    # function to save/update portfolio logic here
-    # e.g. by calling a database function to update the selected stocks
+    
+    update_portfolio_data_to_db(portfolio_name, selected_stocks)
+    
     return redirect('/list-portfolio')  # Redirect back to the list portfolio page
     
 @app.route('/api/portfolio/<portfolio_name>/stocks')

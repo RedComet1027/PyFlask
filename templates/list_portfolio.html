@@ -46,9 +46,6 @@
                 window.location.href = `/edit-portfolio?name=${encodeURIComponent(portfolioName)}`;
             }
         }
-
-        // Ensure this function triggers on change of dropdown
-document.getElementById('portfolioSelect').addEventListener('change', toggleEditButton);
         
         function loadPortfolioStocks() {
             const portfolioName = document.getElementById('portfolioSelect').value;

@@ -12,7 +12,6 @@ conn_str = f'postgresql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE}?sslmode=requir
 
 engine = create_engine(conn_str)
 
-
 def load_stocks_from_db():
     with engine.connect() as conn:
         result = conn.execute(text("select * from stock"))
@@ -22,7 +21,6 @@ def load_stocks_from_db():
     for row in result.all():
         result_dicts.append(dict(row._mapping))
     return result_dicts
-
 
 # for showing single stock by URL: /api/stock/1
 def load_stock_from_db(id):
@@ -43,30 +41,18 @@ def load_stock_from_db(id):
             # convert result (or row) object to a dict
             return dict(stock[0]._mapping)
 
-
-# for saving portoflio data in database
-def save_portfolio_to_db(data):
-    with engine.connect() as conn:
-        # create query in text
-        query = text(
-            "insert into portfolio (id, name, description) values (:id, :name, :description)"
-        )
-        # put data and dict for query
-        value_dict = {
-            "id": '1003',  ## hardcode id for now    
-            "name": data['name'],
-            "description": data['description'],
-        }
-        # execute query and REMEBER to commit
-        conn.execute(query, value_dict)
-        conn.commit()
-
 def save_portfolio_data_to_db(portfolio_name, selected_stocks):
     with engine.connect() as conn:
         query = text("INSERT INTO user_folio (name, stock_tickers) VALUES (:name, :tickers)")
         conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
         conn.commit()
 
+def update_portfolio_data_to_db(portfolio_name, selected_stocks):
+    with engine.connect() as conn:
+        query = text("UPDATE user_folio SET stock_tickers = :tickers WHERE name = :name")
+        conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
+        conn.commit()
+        
 def load_portfolios_from_db():
     with engine.connect() as conn:
         result = conn.execute(text("SELECT DISTINCT name FROM user_folio"))
