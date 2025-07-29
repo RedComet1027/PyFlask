@@ -2,87 +2,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>List Portfolio | DivTracker</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>List Portfolio | DivTracker</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Portfolio List</h2>
-        <div class="mb-3">
-            <label for="portfolioSelect" class="form-label">Select Portfolio</label>
-            <select class="form-select" id="portfolioSelect" onchange="loadPortfolioStocks()">
-                <option value="">Choose a portfolio...</option>
-                {% for portfolio in portfolios %}
-                <option value="{{ portfolio.name }}">{{ portfolio.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <button class="btn btn-primary" onclick="window.location.href='/new-portfolio'">New Portfolio</button>
-        <button class="btn btn-primary" id="editPortfolioButton" onclick="editPortfolio()">Edit Portfolio</button>
-        <button class="btn btn-danger" id="deletePortfolioButton" onclick="deletePortfolio()">Delete Portfolio</button>
-        
-        <div id="stocksTable" style="display: none;">
-            <h4>Stocks in Portfolio</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Ticker</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody id="stocksBody">
-                </tbody>
-            </table>
-        </div>
+  <div class="container mt-5">
+    <h2>Portfolio List</h2>
+    <div class="mb-3">
+      <label for="portfolioSelect" class="form-label">Select Portfolio</label>
+      <select class="form-select" id="portfolioSelect" onchange="loadPortfolioStocks()">
+        <option value="">Choose a portfolio...</option>
+        {% for portfolio in portfolios %}
+        <option value="{{ portfolio.name }}">{{ portfolio.name }}</option>
+        {% endfor %}
+      </select>
     </div>
 
-    <script>
-        function deletePortfolio() {
-            if (confirm('Are you sure you want to delete this portfolio?')) {
-                const portfolioName = document.getElementById('portfolioSelect').value;
-                if (portfolioName) {
-                    window.location.href = `/delete-portfolio?name=${encodeURIComponent(portfolioName)}`;
-                }
-            }
-        }
-        
-        function editPortfolio() {
-            const portfolioName = document.getElementById('portfolioSelect').value;
-            if (portfolioName) {
-                window.location.href = `/edit-portfolio?name=${encodeURIComponent(portfolioName)}`;
-            }
-        }
-        
-        function loadPortfolioStocks() {
-            const portfolioName = document.getElementById('portfolioSelect').value;
-            if (!portfolioName) {
-                document.getElementById('stocksTable').style.display = 'none';
-                return;
-            }
+    <button class="btn btn-primary" onclick="window.location.href='/new-portfolio'">New Portfolio</button>
+    <button class="btn btn-warning" id="editPortfolioButton" onclick="editPortfolio()">Edit Portfolio</button>
+    <button class="btn btn-danger" id="deletePortfolioButton" onclick="deletePortfolio()">Delete Portfolio</button>
+    
+    <div id="stocksTable" style="display: none;">
+      <h4>Stocks in Portfolio</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Ticker</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody id="stocksBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-            fetch(`/api/portfolio/${encodeURIComponent(portfolioName)}/stocks`)
-                .then(response => response.json())
-                .then(stocks => {
-                    const stocksBody = document.getElementById('stocksBody');
-                    stocksBody.innerHTML = '';
-                    
-                    stocks.forEach(stock => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${stock.name}</td>
-                            <td>${stock.ticker}</td>
-                            <td>${stock.price}</td>
-                        `;
-                        stocksBody.appendChild(row);
-                    });
-                    
-                    document.getElementById('stocksTable').style.display = 'block';
-                });
+  <script>
+    function deletePortfolio() {
+      if (confirm('Are you sure you want to delete this portfolio?')) {
+        const portfolioName = document.getElementById('portfolioSelect').value;
+        if (portfolioName) {
+          window.location.href = `/delete-portfolio?name=${encodeURIComponent(portfolioName)}`;
         }
-    </script>
+      }
+    }
+    
+    function editPortfolio() {
+      const portfolioName = document.getElementById('portfolioSelect').value;
+      if (portfolioName) {
+        window.location.href = `/edit-portfolio?name=${encodeURIComponent(portfolioName)}`;
+      }
+    }
+    
+    function loadPortfolioStocks() {
+      const portfolioName = document.getElementById('portfolioSelect').value;
+      if (!portfolioName) {
+        document.getElementById('stocksTable').style.display = 'none';
+        return;
+      }
+
+      fetch(`/api/portfolio/${encodeURIComponent(portfolioName)}/stocks`)
+        .then(response => response.json())
+        .then(stocks => {
+          const stocksBody = document.getElementById('stocksBody');
+          stocksBody.innerHTML = '';
+          
+          stocks.forEach(stock => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${stock.name}</td>
+              <td>${stock.ticker}</td>
+              <td>${stock.price}</td>
+            `;
+            stocksBody.appendChild(row);
+          });
+          
+          document.getElementById('stocksTable').style.display = 'block';
+        });
+    }
+  </script>
 </body>
 </html>

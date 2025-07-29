@@ -2,80 +2,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>New Portfolio | DivTracker</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>New Portfolio | DivTracker</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>New Portfolio</h2>
-        <form action="/save-portfolio" method="post" id="portfolioForm">
-            <div class="mb-3">
-                <label for="portfolioName" class="form-label">Portfolio Name</label>
-                <input type="text" class="form-control" id="portfolioName" name="portfolioName" required>
-            </div>
-            
-            <h4>Available Stocks</h4>
-            <table class="table" id="availableStocks">
-                <thead>
-                    <tr>
-                        <th>Select</th>
-                        <th>Name</th>
-                        <th>Ticker</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for stock in stocks %}
-                    <tr>
-                        <td><input type="checkbox" name="selectedStocks" value="{{ stock.id }}" onchange="updateSelectedStocks(this)"></td>
-                        <td>{{ stock.name }}</td>
-                        <td>{{ stock.ticker }}</td>
-                        <td>{{ stock.price }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+  <div class="container mt-5">
+    <h2>New Portfolio</h2>
+    <form action="/save-portfolio" method="post" id="portfolioForm">
+      <div class="mb-3">
+        <label for="portfolioName" class="form-label">Portfolio Name</label>
+        <input type="text" class="form-control" id="portfolioName" name="portfolioName" required>
+      </div>
+      
+      <h4>Available Stocks</h4>
+      <table class="table" id="availableStocks">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Ticker</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stock in stocks %}
+          <tr>
+            <td><input type="checkbox" name="selectedStocks" value="{{ stock.id }}" onchange="updateSelectedStocks(this)"></td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.ticker }}</td>
+            <td>{{ stock.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-            <h4>Selected Stocks</h4>
-            <table class="table" id="selectedStocksTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Ticker</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody id="selectedStocksBody">
-                </tbody>
-            </table>
+      <h4>Selected Stocks</h4>
+      <table class="table" id="selectedStocksTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Ticker</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody id="selectedStocksBody">
+        </tbody>
+      </table>
 
-            <button type="submit" class="btn btn-primary">Add to Portfolio</button>
-        </form>
-    </div>
+      <button type="submit" class="btn btn-primary">Add to Portfolio</button>
+    </form>
+  </div>
 
-    <script>
-        function updateSelectedStocks(checkbox) {
-            const row = checkbox.closest('tr');
-            const selectedStocksBody = document.getElementById('selectedStocksBody');
-            
-            if (checkbox.checked) {
-                const newRow = document.createElement('tr');
-                newRow.setAttribute('data-stock-id', checkbox.value);
-                newRow.innerHTML = `
-                    <td>${row.cells[1].textContent}</td>
-                    <td>${row.cells[2].textContent}</td>
-                    <td>${row.cells[3].textContent}</td>
-                `;
-                selectedStocksBody.appendChild(newRow);
-            } else {
-                const existingRow = selectedStocksBody.querySelector(`tr[data-stock-id="${checkbox.value}"]`);
-                if (existingRow) {
-                    existingRow.remove();
-                }
-            }
+  <script>
+    function updateSelectedStocks(checkbox) {
+      const row = checkbox.closest('tr');
+      const selectedStocksBody = document.getElementById('selectedStocksBody');
+      
+      if (checkbox.checked) {
+        const newRow = document.createElement('tr');
+        newRow.setAttribute('data-stock-id', checkbox.value);
+        newRow.innerHTML = `
+          <td>${row.cells[1].textContent}</td>
+          <td>${row.cells[2].textContent}</td>
+          <td>${row.cells[3].textContent}</td>
+        `;
+        selectedStocksBody.appendChild(newRow);
+      } else {
+        const existingRow = selectedStocksBody.querySelector(`tr[data-stock-id="${checkbox.value}"]`);
+        if (existingRow) {
+          existingRow.remove();
         }
-    </script>
+      }
+    }
+  </script>
 </body>
 </html>
