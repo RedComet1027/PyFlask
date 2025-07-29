@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from database import load_stocks_from_db, load_stock_from_db, save_portfolio_data_to_db, load_portfolios_from_db, load_portfolio_stocks_from_db, update_portfolio_data_to_db
+from database import load_stocks_from_db, load_stock_from_db, save_portfolio_data_to_db, load_portfolios_from_db, load_portfolio_stocks_from_db, update_portfolio_data_to_db, delete_portfolio_from_db
 
 app = Flask(__name__)
 
@@ -57,6 +57,13 @@ def update_portfolio():
     selected_stocks = request.form.getlist('selectedStocks')
     
     update_portfolio_data_to_db(portfolio_name, selected_stocks)
+    
+    return redirect('/list-portfolio')  # Redirect back to the list portfolio page
+
+@app.route('/delete-portfolio')
+def delete_portfolio():
+    portfolio_name = request.args.get('name')
+    delete_portfolio_from_db(portfolio_name)
     
     return redirect('/list-portfolio')  # Redirect back to the list portfolio page
     

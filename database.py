@@ -52,6 +52,12 @@ def update_portfolio_data_to_db(portfolio_name, selected_stocks):
         query = text("UPDATE user_folio SET stock_tickers = :tickers WHERE name = :name")
         conn.execute(query, {"name": portfolio_name, "tickers": ','.join(selected_stocks)})
         conn.commit()
+
+def delete_portfolio_from_db(portfolio_name):
+    with engine.connect() as conn:
+        query = text("DELETE FROM user_folio WHERE name = :name")
+        conn.execute(query, {"name": portfolio_name})
+        conn.commit()
         
 def load_portfolios_from_db():
     with engine.connect() as conn:
