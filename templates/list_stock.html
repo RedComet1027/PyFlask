@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>List Stocks | DivTracker</title>
+</head>
+<body>
+  {% include 'navbar.html' %}
+  <div class="container mt-5">
+    <h2>Stock List</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Ticker</th>
+          <th>Latest Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stock in stocks %}
+        <tr>
+          <td>{{ stock.name }}</td>
+          <td>{{ stock.ticker }}</td>
+          <td>{{ stock.latest_price }}</td>
+          <td>
+            <a href="/edit-stock/{{ stock.id }}" class="btn btn-warning btn-sm">Edit Stock</a>
+            <a href="/delete-stock/{{ stock.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this stock?');">Delete Stock</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
