@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Confirm Delete Stock | DivTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container mt-5">
+        <h2>Warning: Stock In Use</h2>
+        <div class="alert alert-warning">
+            <p>The stock <strong>{{ stock.name }} ({{ stock.ticker }})</strong> is included in the following portfolios:</p>
+            <ul>
+                {% for portfolio in portfolios %}
+                <li>{{ portfolio }}</li>
+                {% endfor %}
+            </ul>
+            <p>This action will affect all portfolios containing this stock. Are you sure you want to delete? </p>
+        </div>
+        <form method="post">
+            <button type="submit" class="btn btn-danger">Yes, Delete Anyway</button>
+            <a href="/list-stock" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

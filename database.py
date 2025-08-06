@@ -102,3 +102,24 @@ def delete_stock_from_db(stock_id):
       query = text("DELETE FROM stock WHERE id = :id")
       conn.execute(query, {"id": stock_id})
       conn.commit()
+
+def find_portfolios_with_stock(stock_id):
+  portfolios_with_stock = []
+  with engine.connect() as conn:
+      # Obtain stock_tickers from all portfolios
+      result = conn.execute(text("SELECT name, stock_tickers FROM user_folio"))
+      for row in result:
+          stock_ids = []
+          # Extract stock_tickers column value from query result (e.g.: '1,2,3')
+          stock_tickers = row._mapping['stock_tickers']
+          if stock_tickers:
+              # Split stock_tickers string into individual stock IDs (e.g., '1', '2', '3')
+              id_strs = stock_tickers.split(',')
+              for sid in id_strs:
+                  # Convert non-empty stock IDs from string to integer and add to list (e.g. [1,2,3])
+                  if sid.strip() != '':
+                      stock_ids.append(int(sid.strip()))
+          # If the given stock_id is present in this portfolio, add its name to the result
+          if int(stock_id) in stock_ids:
+              portfolios_with_stock.append(row._mapping['name'])
+  return portfolios_with_stock

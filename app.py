@@ -124,9 +124,22 @@ def edit_stock(stock_id):
         update_stock_in_db(stock_id, name, ticker, price)
         return redirect('/list-stock')
       
-@app.route('/delete-stock/<int:stock_id>')
+@app.route('/delete-stock/<int:stock_id>', methods=['GET', 'POST'])
 def delete_stock(stock_id):
-    delete_stock_from_db(stock_id)
-    return redirect('/list-stock')
+    # On GET, check if this stock is in any portfolio
+    if request.method == 'GET':
+        portfolios = find_portfolios_with_stock(stock_id)
+        if portfolios:
+            # Show confirmation page with warning
+            stock = load_stock_from_db(stock_id)
+            return render_template('confirm_delete_stock.html', stock=stock, portfolios=portfolios)
+        else:
+            # If not in any portfolio, delete directly
+            delete_stock_from_db(stock_id)
+            return redirect('/list-stock')
+    else:
+        # POST: User confirmed deletion, delete and redirect
+        delete_stock_from_db(stock_id)
+        return redirect('/list-stock')
 
 app.run(host='0.0.0.0', port=81)
