@@ -90,3 +90,9 @@ def save_stock_to_db(name, ticker, price):
       query = text("INSERT INTO stock (name, ticker, price) VALUES (:name, :ticker, :price)")
       conn.execute(query, {"name": name, "ticker": ticker, "price": float(price)})
       conn.commit()
+
+def update_stock_in_db(stock_id, name, ticker, price):
+  with engine.connect() as conn:
+      query = text("UPDATE stock SET name = :name, ticker = :ticker, price = :price WHERE id = :id")
+      conn.execute(query, {"id": stock_id, "name": name, "ticker": ticker, "price": float(price)})
+      conn.commit()

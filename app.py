@@ -1,10 +1,11 @@
-from flask import Flask, render_template, jsonify, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from database import load_stocks_from_db, load_stock_from_db, save_portfolio_data_to_db, load_portfolios_from_db, load_portfolio_stocks_from_db, update_portfolio_data_to_db, delete_portfolio_from_db, save_stock_to_db
 import yfinance as yf
 
-app = Flask(__name__)
+from flask import Flask, render_template, jsonify, request, redirect
+from flask_sqlalchemy import SQLAlchemy
 
+from database import *
+
+app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -109,12 +110,20 @@ def save_stock():
   save_stock_to_db(name, ticker, price)
   return redirect('/list-stock')
   
-# Add dummy routes for edit and delete (implement as needed)
-@app.route('/edit-stock/<int:stock_id>')
+@app.route('/edit-stock/<int:stock_id>', methods=['GET', 'POST'])
 def edit_stock(stock_id):
-  # Implement your edit logic here
-  return f"Edit stock {stock_id}"
-
+    if request.method == 'GET':
+        stock = load_stock_from_db(stock_id)
+        if not stock:
+            return "Stock not found", 404
+        return render_template('edit_stock.html', stock=stock)
+    else:
+        name = request.form['stockName']
+        ticker = request.form['stockTicker']
+        price = "0" # default price for all stocks
+        update_stock_in_db(stock_id, name, ticker, price)
+        return redirect('/list-stock')
+      
 @app.route('/delete-stock/<int:stock_id>')
 def delete_stock(stock_id):
   # Implement your delete logic here
