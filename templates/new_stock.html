@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Add New Stock | DivTracker</title>
+</head>
+<body>
+  {% include 'navbar.html' %}
+  <div class="container mt-5">
+    <h2>New Stock</h2>
+    <form method="post" action="/save-stock">
+      <div class="mb-3">
+        <label for="stockName" class="form-label">Stock Name</label>
+        <input type="text" class="form-control" id="stockName" name="stockName" required>
+      </div>
+      <div class="mb-3">
+        <label for="stockTicker" class="form-label">Ticker</label>
+        <input type="text" class="form-control" id="stockTicker" name="stockTicker" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Stock</button>
+      <a href="/list-stock" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>
