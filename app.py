@@ -126,8 +126,7 @@ def edit_stock(stock_id):
       
 @app.route('/delete-stock/<int:stock_id>')
 def delete_stock(stock_id):
-  # Implement your delete logic here
-  return f"Delete stock {stock_id}"
-
+    delete_stock_from_db(stock_id)
+    return redirect('/list-stock')
 
 app.run(host='0.0.0.0', port=81)

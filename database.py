@@ -96,3 +96,9 @@ def update_stock_in_db(stock_id, name, ticker, price):
       query = text("UPDATE stock SET name = :name, ticker = :ticker, price = :price WHERE id = :id")
       conn.execute(query, {"id": stock_id, "name": name, "ticker": ticker, "price": float(price)})
       conn.commit()
+
+def delete_stock_from_db(stock_id):
+  with engine.connect() as conn:
+      query = text("DELETE FROM stock WHERE id = :id")
+      conn.execute(query, {"id": stock_id})
+      conn.commit()
